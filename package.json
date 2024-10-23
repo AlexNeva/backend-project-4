@@ -4,7 +4,9 @@
   "description": "[![Actions Status](https://github.com/AlexNeva/backend-project-4/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/AlexNeva/backend-project-4/actions)",
   "main": "src/index.js",
   "type": "module",
-  "bin": "bin/pageLoader.js",
+  "bin": {
+    "page-loader": "bin/pageLoader.js"
+  },
   "scripts": {
     "test": "npx jest"
   },
