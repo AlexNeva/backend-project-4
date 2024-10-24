@@ -11,9 +11,12 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => resolve(__dirname, '../__fixtures__/', filename);
 
 test('urlToFilename', () => {
-  const url = 'https://ru.hexlet.io/courses';
-  const expectedFilename = 'ru-hexlet-io-courses.html';
-  expect(urlToFilename(url)).toEqual(expectedFilename);
+  const url1 = 'https://ru.hexlet.io/courses';
+  const expectedFilename1 = 'ru-hexlet-io-courses.html';
+  const url2 = 'https://chatgpt.com/c/671a75be-4474-8006-a54e-e0230bd21a56';
+  const expectedFilename2 = 'chatgpt-com-c-671a75be-4474-8006-a54e-e0230bd21a56.html';
+  expect(urlToFilename(url1)).toEqual(expectedFilename1);
+  expect(urlToFilename(url2)).toEqual(expectedFilename2);
 });
 
 test('getPageData', async () => {
