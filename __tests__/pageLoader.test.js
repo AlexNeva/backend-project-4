@@ -1,16 +1,28 @@
-import { mkdtemp } from 'node:fs/promises';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
+import nock from 'nock';
+import { readFile } from 'node:fs/promises';
 import urlToFilename from '../src/urlToFilename.js';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { getPageData } from '../src/index.js';
 
-// let tempDir;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// beforeEach(async () => {
-//   tempDir = await mkdtemp(join(tmpdir(), 'page-loader-'));
-// });
+const getFixturePath = (filename) => resolve(__dirname, '../__fixtures__/', filename);
 
 test('urlToFilename', () => {
   const url = 'https://ru.hexlet.io/courses';
   const expectedFilename = 'ru-hexlet-io-courses.html';
   expect(urlToFilename(url)).toEqual(expectedFilename);
+});
+
+test('getPageData', async () => {
+  const data = await readFile(getFixturePath('page/index.html'), 'utf-8');
+
+  nock(/ru\.hexlet\.io/)
+    .get('/courses')
+    .reply(200, { data });
+
+  const response = await getPageData('https://ru.hexlet.io/courses');
+  expect(response.data).toEqual(data);
 });
