@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import urlToFilename from './urlToFilename.js';
 import { resolve } from 'node:path';
 
@@ -9,7 +9,6 @@ const pageLoader = (url, dir = process.cwd()) => {
   const filePath = resolve(dir, urlToFilename(url));
 
   getPageData(url)
-    .then((data) => mkdir(dir, { recursive: true }).then(() => data))
     .then((data) => writeFile(filePath, data))
     .then(() => console.log(`Page was successfully downloaded into '${filePath}'`))
     .catch((error) => console.error(error));
