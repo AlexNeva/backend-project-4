@@ -3,7 +3,13 @@ import { writeFile } from 'node:fs/promises';
 import generateSlug from './generateSlug.js';
 import { resolve } from 'node:path';
 
-export const getPageData = (url) => axios.get(url).then((response) => response.data);
+export const getPageData = (url) =>
+  axios
+    .get(url)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
 
 const pageLoader = (url, dir = process.cwd()) => {
   const filePath = resolve(dir, `${generateSlug(url)}.html`);
