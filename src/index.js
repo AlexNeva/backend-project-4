@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { writeFile } from 'node:fs/promises';
-import urlToFilename from './urlToFilename.js';
+import generateSlug from './generateSlug.js';
 import { resolve } from 'node:path';
 
 export const getPageData = (url) => axios.get(url).then((response) => response.data);
 
 const pageLoader = (url, dir = process.cwd()) => {
-  const filePath = resolve(dir, urlToFilename(url));
+  const filePath = resolve(dir, `${generateSlug(url)}.html`);
 
   getPageData(url)
     .then((data) => writeFile(filePath, data))
