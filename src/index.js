@@ -12,10 +12,13 @@ export const getPageData = (url) =>
     });
 
 const pageLoader = (url, dir = process.cwd()) => {
-  const filePath = resolve(dir, `${generateSlug(url)}.html`);
+  const urlObj = new URL(url);
+  const formattedUrl = `${urlObj.hostname}${urlObj.pathname === '/' ? '' : urlObj.pathname}`;
+
+  const filePath = resolve(dir, `${generateSlug(formattedUrl)}.html`);
 
   getPageData(url)
-    .then((data) => writeFile(filePath, data))
+    .then((html) => writeFile(filePath, html))
     .then(() => console.log(`Page was successfully downloaded into '${filePath}'`))
     .catch((error) => console.error(error));
 };
