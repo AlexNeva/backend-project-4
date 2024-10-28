@@ -13,4 +13,4 @@ const pageLoader = (url, dir = process.cwd()) => {
 
 export default pageLoader;
 
-pageLoader('https://portal.hse.ru/format', './downloads');
+// pageLoader('https://portal.hse.ru/format', './downloads');

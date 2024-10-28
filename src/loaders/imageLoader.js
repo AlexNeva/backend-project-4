@@ -3,6 +3,7 @@ import { join, parse, resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import axios from 'axios';
 import generateSlug from '../utils/generateSlug.js';
+import { isLocalLink } from '../utils/isLocalLink.js';
 
 const createImgFilename = (path, hostname) => {
   const { dir, ext, name } = parse(path);
@@ -35,6 +36,11 @@ export const downloadImages = (pathToHtml, pageUrl) => {
       const imagesInfo = $('img')
         .map((_, img) => {
           const currentSrc = $(img).attr('src');
+
+          // if (!isLocalLink(currentSrc, pageUrl)) {
+          //   return;
+          // }
+
           const { href } = new URL(currentSrc, origin);
           const imgFilename = createImgFilename(currentSrc, hostname);
           const newSrc = join(assetsFoldername, imgFilename);
@@ -42,6 +48,8 @@ export const downloadImages = (pathToHtml, pageUrl) => {
           return { $img: $(img), imagePath: href, filename: imgFilename, newSrc };
         })
         .toArray();
+
+      console.log(imagesInfo);
 
       return imagesInfo;
     })

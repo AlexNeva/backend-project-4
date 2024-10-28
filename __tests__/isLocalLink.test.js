@@ -4,9 +4,14 @@ const resources = [
   { link: '/assets/application.css', baseUrl: 'https://example.com', expected: true },
   { link: 'https://ru.example.com', baseUrl: 'https://example.com', expected: false },
   {
-    link: 'https://ru.hexlet.io/packs/js/runtime.js',
-    baseUrl: 'https://ru.hexlet.io',
+    link: 'https://example.com/packs/js/runtime.js',
+    baseUrl: 'https://example.com',
     expected: true,
+  },
+  {
+    link: undefined,
+    baseUrl: 'https://example.com',
+    expected: false,
   },
 ];
 
