@@ -4,7 +4,7 @@ export const isLocalLink = (link, baseUrl) => {
     const baseOrigin = new URL(baseUrl).origin;
 
     return url.origin === baseOrigin;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
