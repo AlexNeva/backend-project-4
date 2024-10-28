@@ -10,7 +10,7 @@ let tempDir;
 
 beforeEach(async () => {
   tempDir = await mkdtemp(join(tmpdir(), 'page-loader-'));
-  const sourcePath = getFixturePath('withResources.html');
+  const sourcePath = getFixturePath('index.html');
   const destinationPath = join(tempDir, 'ru-hexlet-io-courses.html');
   await copyFile(sourcePath, destinationPath);
 });
@@ -32,7 +32,7 @@ test('download images', async () => {
   );
 
   const changedHtml = await readFile(join(tempDir, 'ru-hexlet-io-courses.html'), 'utf-8');
-  const expectedHtml = await readFile(getFixturePath('withResourcesChanged.html'), 'utf-8');
+  const expectedHtml = await readFile(getFixturePath('changed.html'), 'utf-8');
 
   expect(Buffer.compare(receivedImg, expectedImg)).toEqual(0);
   expect(normalizeHtml(changedHtml)).toEqual(normalizeHtml(expectedHtml));
