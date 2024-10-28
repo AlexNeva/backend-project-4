@@ -14,11 +14,7 @@ const createImgFilename = (path, hostname) => {
 const loadImage = (pathToLoad, pathToWrite) =>
   axios
     .get(pathToLoad, { responseType: 'arraybuffer' })
-    .then((response) => {
-      const data = Buffer.from(response.data);
-
-      return writeFile(pathToWrite, data);
-    })
+    .then((response) => writeFile(pathToWrite, response.data))
     .catch(() => {
       throw `Image loading by "${pathToLoad}" is failed`;
     });
