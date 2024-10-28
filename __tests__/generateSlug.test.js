@@ -1,4 +1,4 @@
-import generateSlug from '../src/generateSlug.js';
+import generateSlug from '../src/utils/generateSlug.js';
 
 test('generateSlug', () => {
   const url1 = 'ru.hexlet.io/courses';

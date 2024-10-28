@@ -1,5 +1,5 @@
 import axios from 'axios';
-import generateSlug from '../generateSlug.js';
+import generateSlug from '../utils/generateSlug.js';
 import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
 

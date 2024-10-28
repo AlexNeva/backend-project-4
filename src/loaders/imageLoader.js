@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, parse, resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import axios from 'axios';
-import generateSlug from '../generateSlug.js';
+import generateSlug from '../utils/generateSlug.js';
 
 const createImgFilename = (path, hostname) => {
   const { dir, ext, name } = parse(path);
