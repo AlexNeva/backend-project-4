@@ -5,22 +5,29 @@ import axios from 'axios';
 import generateSlug from '../utils/generateSlug.js';
 import { isLocalLink } from '../utils/isLocalLink.js';
 
-const createImgFilename = (path, hostname) => {
+const createResourceFilename = (path, hostname) => {
   const { dir, ext, name } = parse(path);
   const imgFilename = `${generateSlug(join(hostname, dir, name))}${ext}`;
 
   return imgFilename;
 };
 
-const loadImage = (pathToLoad, pathToWrite) =>
+const loadResource = (pathToLoad, pathToWrite) =>
   axios
     .get(pathToLoad, { responseType: 'arraybuffer' })
     .then((response) => writeFile(pathToWrite, response.data))
     .catch(() => {
-      throw `Image loading by "${pathToLoad}" is failed`;
+      throw `Resource loading by "${pathToLoad}" is failed`;
     });
 
-export const downloadImages = (pathToHtml, pageUrl) => {
+const mapping = {
+  img: 'src',
+  script: 'src',
+  link: 'href',
+};
+const getAttrByTagname = (tagname) => mapping[tagname];
+
+export const downloadResources = (pathToHtml, pageUrl) => {
   const { dir, name } = parse(pathToHtml);
   const assetsFoldername = `${name}_files`;
   const assetsPath = resolve(dir, assetsFoldername);
@@ -33,30 +40,29 @@ export const downloadImages = (pathToHtml, pageUrl) => {
     .then((htmlData) => {
       $ = cheerio.load(htmlData);
 
-      const imagesInfo = $('img')
-        .map((_, img) => {
-          const currentSrc = $(img).attr('src');
+      const resourcesInfo = $('img, script, link')
+        .map((_, el) => {
+          const attr = getAttrByTagname(el.name);
+          const currentResourcePath = $(el).attr(attr);
 
-          // if (!isLocalLink(currentSrc, pageUrl)) {
-          //   return;
-          // }
+          if (!isLocalLink(currentResourcePath, pageUrl)) {
+            return;
+          }
 
-          const { href } = new URL(currentSrc, origin);
-          const imgFilename = createImgFilename(currentSrc, hostname);
-          const newSrc = join(assetsFoldername, imgFilename);
+          const { href } = new URL(currentResourcePath, origin);
+          const filename = createResourceFilename(currentResourcePath, hostname);
+          const newResourcePath = join(assetsFoldername, filename);
 
-          return { $img: $(img), imagePath: href, filename: imgFilename, newSrc };
+          return { $node: $(el), resourcePath: href, filename, newResourcePath };
         })
         .toArray();
 
-      console.log(imagesInfo);
-
-      return imagesInfo;
+      return resourcesInfo;
     })
-    .then((imagesInfo) => {
-      const promises = imagesInfo.map(({ filename, imagePath, $img, newSrc }) => {
+    .then((resourceInfo) => {
+      const promises = resourceInfo.map(({ filename, resourcePath, $node, newResourcePath }) => {
         const pathToWrite = join(assetsPath, filename);
-        return loadImage(imagePath, pathToWrite).then(() => ({ $img, newSrc }));
+        return loadResource(resourcePath, pathToWrite).then(() => ({ $node, newResourcePath }));
       });
 
       return Promise.allSettled(promises);
@@ -64,9 +70,9 @@ export const downloadImages = (pathToHtml, pageUrl) => {
     .then((promises) => {
       promises.forEach((promise) => {
         if (promise.status === 'fulfilled') {
-          const { $img, newSrc } = promise.value;
-
-          $img.attr('src', newSrc);
+          const { $node, newResourcePath } = promise.value;
+          const attr = getAttrByTagname($node.prop('tagName').toLowerCase());
+          $node.attr(attr, newResourcePath);
         } else {
           console.log(promise.reason);
         }
