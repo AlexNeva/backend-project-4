@@ -7,9 +7,9 @@ import { isLocalLink } from '../utils/isLocalLink.js';
 
 const createResourceFilename = (path, hostname) => {
   const { dir, ext, name } = parse(path);
-  const imgFilename = `${generateSlug(join(hostname, dir, name))}${ext}`;
+  const resourceFilename = `${generateSlug(join(hostname, dir, name))}${ext}`;
 
-  return imgFilename;
+  return resourceFilename;
 };
 
 const loadResource = (pathToLoad, pathToWrite) =>
