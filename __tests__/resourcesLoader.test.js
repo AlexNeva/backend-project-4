@@ -1,9 +1,9 @@
 import { copyFile, mkdtemp, readFile } from 'node:fs/promises';
 import { getFixturePath, normalizeHtml } from './utils.js';
-import { downloadImages } from '../src/loaders/imageLoader.js';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import nock from 'nock';
+import { downloadResources } from '../src/loaders/resourcesLoader.js';
 
 const pageUrl = 'https://ru.hexlet.io/courses';
 let tempDir;
@@ -15,7 +15,7 @@ beforeEach(async () => {
   await copyFile(sourcePath, destinationPath);
 });
 
-test('download images', async () => {
+test('download resources', async () => {
   const pathToHtml = join(tempDir, 'ru-hexlet-io-courses.html');
   const assetsPath = join(tempDir, 'ru-hexlet-io-courses_files');
 
@@ -25,7 +25,19 @@ test('download images', async () => {
     .get('/assets/professions/nodejs.png')
     .reply(200, expectedImg);
 
-  await downloadImages(pathToHtml, pageUrl);
+  nock(/ru\.hexlet\.io/)
+    .get('/assets/application.css')
+    .reply(200, {});
+
+  nock(/ru\.hexlet\.io/)
+    .get('/courses')
+    .reply(200, {});
+
+  nock(/ru\.hexlet\.io/)
+    .get('/packs/js/runtime.js')
+    .reply(200, {});
+
+  await downloadResources(pathToHtml, pageUrl);
 
   const receivedImg = await readFile(
     join(assetsPath, 'ru-hexlet-io-assets-professions-nodejs.png')
