@@ -25,6 +25,18 @@ test('download resources', async () => {
     .get('/assets/professions/nodejs.png')
     .reply(200, expectedImg);
 
+  nock(/ru\.hexlet\.io/)
+    .get('/assets/application.css')
+    .reply(200, {});
+
+  nock(/ru\.hexlet\.io/)
+    .get('/courses')
+    .reply(200, {});
+
+  nock(/ru\.hexlet\.io/)
+    .get('/packs/js/runtime.js')
+    .reply(200, {});
+
   await downloadResources(pathToHtml, pageUrl);
 
   const receivedImg = await readFile(

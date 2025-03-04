@@ -4,10 +4,12 @@ import * as cheerio from 'cheerio';
 import axios from 'axios';
 import generateSlug from '../utils/generateSlug.js';
 import { isLocalLink } from '../utils/isLocalLink.js';
+import isAbsoluteUrl from '../utils/isAbsoluteUrl.js';
 
 const createResourceFilename = (path, hostname) => {
-  const { dir, ext, name } = parse(path);
-  const resourceFilename = `${generateSlug(join(hostname, dir, name))}${ext}`;
+  const normalizePath = isAbsoluteUrl(path) ? new URL(path).pathname : path;
+  const { dir, ext, name } = parse(normalizePath);
+  const resourceFilename = `${generateSlug(join(hostname, dir, name))}${ext || '.html'}`;
 
   return resourceFilename;
 };
