@@ -12,8 +12,8 @@ const pageLoader = (url, dir = process.cwd()) => {
 
   downloadHtml(url, dir)
     .then((pathToHtml) => downloadResources(pathToHtml, url))
-    .then(() => console.log(`Page was successfully downloaded into '${dirPath}'`));
-  // .catch((error) => console.error(error));
+    .then(() => console.log(`Page was successfully downloaded into '${dirPath}'`))
+    .catch((error) => console.error(error));
 };
 
 export default pageLoader;
