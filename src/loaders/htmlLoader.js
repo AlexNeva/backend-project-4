@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/index.js';
 import generateSlug from '../utils/generateSlug.js';
 import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
@@ -9,7 +9,7 @@ export const downloadHtml = (url, dir) => {
 
   const filePath = resolve(dir, `${generateSlug(formattedUrl)}.html`);
 
-  return axios
+  return api
     .get(url)
     .then((response) => response.data)
     .catch((error) => {

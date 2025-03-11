@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, parse, resolve } from 'node:path';
 import * as cheerio from 'cheerio';
-import axios from 'axios';
+import api from '../api/index.js';
 import generateSlug from '../utils/generateSlug.js';
 import { isLocalLink } from '../utils/isLocalLink.js';
 import isAbsoluteUrl from '../utils/isAbsoluteUrl.js';
@@ -15,7 +15,7 @@ const createResourceFilename = (path, hostname) => {
 };
 
 const loadResource = (pathToLoad, pathToWrite) =>
-  axios
+  api
     .get(pathToLoad, { responseType: 'arraybuffer' })
     .then((response) => writeFile(pathToWrite, response.data))
     .catch(() => {
