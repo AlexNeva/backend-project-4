@@ -12,12 +12,8 @@ program
   .arguments('<url>')
   .action((url, option) => {
     pageLoader(url, option.output).catch((error) => {
-      if (isNetworkError(error)) {
-        console.error(error.message);
-      } else {
-        console.error(error.message);
-        process.exit(1);
-      }
+      console.error(error.message);
+      process.exit(1);
     });
   });
 
