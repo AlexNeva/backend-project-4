@@ -67,7 +67,12 @@ const downloadResources = (pathToHtml, pageUrl) => {
       return resourcesInfo;
     })
     .then((resourceInfo) => {
-      const promises = resourceInfo.map(({ filename, resourcePath, $node, newResourcePath }) => {
+      const promises = resourceInfo.map(({
+        filename,
+        resourcePath,
+        $node,
+        newResourcePath
+      }) => {
         const pathToWrite = join(assetsPath, filename);
         return loadResource(resourcePath, pathToWrite).then(() => ({ $node, newResourcePath }));
       });

@@ -40,9 +40,7 @@ test('download resources', async () => {
 
   await downloadResources(pathToHtml, pageUrl);
 
-  const receivedImg = await readFile(
-    join(assetsPath, 'ru-hexlet-io-assets-professions-nodejs.png')
-  );
+  const receivedImg = await readFile(join(assetsPath, 'ru-hexlet-io-assets-professions-nodejs.png'));
 
   const changedHtml = await readFile(join(tempDir, 'ru-hexlet-io-courses.html'), 'utf-8');
   const expectedHtml = await readFile(getFixturePath('changed.html'), 'utf-8');
