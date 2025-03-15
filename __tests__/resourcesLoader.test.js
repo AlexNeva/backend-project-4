@@ -1,9 +1,10 @@
 import { copyFile, mkdtemp, readFile } from 'node:fs/promises';
-import { getFixturePath, normalizeHtml } from './utils.js';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import nock from 'nock';
+import { getFixturePath, normalizeHtml } from './utils.js';
 import { downloadResources } from '../src/loaders/resourcesLoader.js';
+import { beforeEach, expect, test } from '@jest/globals';
 
 const pageUrl = 'https://ru.hexlet.io/courses';
 let tempDir;

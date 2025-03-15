@@ -2,7 +2,6 @@
 
 import { program } from 'commander';
 import pageLoader from '../src/index.js';
-import { isNetworkError } from '../src/api/errors.js';
 
 program
   .name('page-loader')

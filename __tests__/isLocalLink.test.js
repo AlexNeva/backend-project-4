@@ -1,3 +1,4 @@
+import { expect, test } from '@jest/globals';
 import { isLocalLink } from '../src/utils/isLocalLink.js';
 
 const resources = [
