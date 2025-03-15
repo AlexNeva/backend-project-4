@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { isLocalLink } from '../src/utils/isLocalLink.js';
+import isLocalLink from '../src/utils/isLocalLink.js';
 
 const resources = [
   { link: '/assets/application.css', baseUrl: 'https://example.com', expected: true },
