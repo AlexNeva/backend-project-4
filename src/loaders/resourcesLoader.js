@@ -14,8 +14,7 @@ const createResourceFilename = (path, hostname) => {
   return resourceFilename;
 };
 
-const loadResource = (pathToLoad, pathToWrite) =>
-  api
+const loadResource = (pathToLoad, pathToWrite) => api
     .get(pathToLoad, { responseType: 'arraybuffer' })
     .then((response) => writeFile(pathToWrite, response.data))
     .catch((error) => {
@@ -71,7 +70,7 @@ const downloadResources = (pathToHtml, pageUrl) => {
         filename,
         resourcePath,
         $node,
-        newResourcePath
+        newResourcePath,
       }) => {
         const pathToWrite = join(assetsPath, filename);
         return loadResource(resourcePath, pathToWrite).then(() => ({ $node, newResourcePath }));
