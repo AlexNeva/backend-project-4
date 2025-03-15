@@ -15,11 +15,11 @@ const createResourceFilename = (path, hostname) => {
 };
 
 const loadResource = (pathToLoad, pathToWrite) => api
-    .get(pathToLoad, { responseType: 'arraybuffer' })
-    .then((response) => writeFile(pathToWrite, response.data))
-    .catch((error) => {
-      throw error;
-    });
+  .get(pathToLoad, { responseType: 'arraybuffer' })
+  .then((response) => writeFile(pathToWrite, response.data))
+  .catch((error) => {
+    throw error;
+  });
 
 const mapping = {
   img: 'src',
