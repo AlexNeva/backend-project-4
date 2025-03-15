@@ -47,7 +47,7 @@ const downloadResources = (pathToHtml, pageUrl) => {
           const currentResourcePath = $(el).attr(attr);
 
           if (!isLocalLink(currentResourcePath, pageUrl)) {
-            return;
+            return null;
           }
 
           const { href } = new URL(currentResourcePath, origin);
@@ -61,7 +61,8 @@ const downloadResources = (pathToHtml, pageUrl) => {
             newResourcePath,
           };
         })
-        .toArray();
+        .toArray()
+        .filter(Boolean);
 
       return resourcesInfo;
     })
