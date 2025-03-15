@@ -10,7 +10,10 @@ program
   .option('-o, --output [dir]', 'output directory', process.cwd())
   .arguments('<url>')
   .action((url, option) => {
-    pageLoader(url, option.output);
+    pageLoader(url, option.output).catch((error) => {
+      console.error(error.message);
+      process.exit(1);
+    });
   });
 
 program.parse();

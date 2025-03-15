@@ -1,3 +1,4 @@
+import { expect, test } from '@jest/globals';
 import generateSlug from '../src/utils/generateSlug.js';
 
 test('generateSlug', () => {

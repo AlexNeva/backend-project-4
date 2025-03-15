@@ -1,4 +1,4 @@
-export const isLocalLink = (link, baseUrl) => {
+const isLocalLink = (link, baseUrl) => {
   if (!link) {
     return false;
   }
@@ -12,3 +12,5 @@ export const isLocalLink = (link, baseUrl) => {
     return false;
   }
 };
+
+export default isLocalLink;

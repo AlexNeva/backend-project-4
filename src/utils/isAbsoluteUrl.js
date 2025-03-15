@@ -2,7 +2,7 @@ const isAbsoluteUrl = (url) => {
   /* eslint-disable no-unused-vars */
 
   try {
-    new URL(url);
+    const _ = new URL(url);
     return true;
   } catch (err) {
     return false;

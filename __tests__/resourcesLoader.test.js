@@ -1,9 +1,10 @@
 import { copyFile, mkdtemp, readFile } from 'node:fs/promises';
-import { getFixturePath, normalizeHtml } from './utils.js';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import nock from 'nock';
-import { downloadResources } from '../src/loaders/resourcesLoader.js';
+import { beforeEach, expect, test } from '@jest/globals';
+import { getFixturePath, normalizeHtml } from './utils.js';
+import downloadResources from '../src/loaders/resourcesLoader.js';
 
 const pageUrl = 'https://ru.hexlet.io/courses';
 let tempDir;
@@ -39,9 +40,7 @@ test('download resources', async () => {
 
   await downloadResources(pathToHtml, pageUrl);
 
-  const receivedImg = await readFile(
-    join(assetsPath, 'ru-hexlet-io-assets-professions-nodejs.png')
-  );
+  const receivedImg = await readFile(join(assetsPath, 'ru-hexlet-io-assets-professions-nodejs.png'));
 
   const changedHtml = await readFile(join(tempDir, 'ru-hexlet-io-courses.html'), 'utf-8');
   const expectedHtml = await readFile(getFixturePath('changed.html'), 'utf-8');

@@ -3,7 +3,7 @@ import { join, parse, resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import api from '../api/index.js';
 import generateSlug from '../utils/generateSlug.js';
-import { isLocalLink } from '../utils/isLocalLink.js';
+import isLocalLink from '../utils/isLocalLink.js';
 import isAbsoluteUrl from '../utils/isAbsoluteUrl.js';
 
 const createResourceFilename = (path, hostname) => {
@@ -14,13 +14,12 @@ const createResourceFilename = (path, hostname) => {
   return resourceFilename;
 };
 
-const loadResource = (pathToLoad, pathToWrite) =>
-  api
-    .get(pathToLoad, { responseType: 'arraybuffer' })
-    .then((response) => writeFile(pathToWrite, response.data))
-    .catch(() => {
-      throw `Resource loading by "${pathToLoad}" is failed`;
-    });
+const loadResource = (pathToLoad, pathToWrite) => api
+  .get(pathToLoad, { responseType: 'arraybuffer' })
+  .then((response) => writeFile(pathToWrite, response.data))
+  .catch((error) => {
+    throw error;
+  });
 
 const mapping = {
   img: 'src',
@@ -29,7 +28,7 @@ const mapping = {
 };
 const getAttrByTagname = (tagname) => mapping[tagname];
 
-export const downloadResources = (pathToHtml, pageUrl) => {
+const downloadResources = (pathToHtml, pageUrl) => {
   const { dir, name } = parse(pathToHtml);
   const assetsFoldername = `${name}_files`;
   const assetsPath = resolve(dir, assetsFoldername);
@@ -48,21 +47,32 @@ export const downloadResources = (pathToHtml, pageUrl) => {
           const currentResourcePath = $(el).attr(attr);
 
           if (!isLocalLink(currentResourcePath, pageUrl)) {
-            return;
+            return null;
           }
 
           const { href } = new URL(currentResourcePath, origin);
           const filename = createResourceFilename(currentResourcePath, hostname);
           const newResourcePath = join(assetsFoldername, filename);
 
-          return { $node: $(el), resourcePath: href, filename, newResourcePath };
+          return {
+            $node: $(el),
+            resourcePath: href,
+            filename,
+            newResourcePath,
+          };
         })
-        .toArray();
+        .toArray()
+        .filter(Boolean);
 
       return resourcesInfo;
     })
     .then((resourceInfo) => {
-      const promises = resourceInfo.map(({ filename, resourcePath, $node, newResourcePath }) => {
+      const promises = resourceInfo.map(({
+        filename,
+        resourcePath,
+        $node,
+        newResourcePath,
+      }) => {
         const pathToWrite = join(assetsPath, filename);
         return loadResource(resourcePath, pathToWrite).then(() => ({ $node, newResourcePath }));
       });
@@ -76,12 +86,17 @@ export const downloadResources = (pathToHtml, pageUrl) => {
           const attr = getAttrByTagname($node.prop('tagName').toLowerCase());
           $node.attr(attr, newResourcePath);
         } else {
-          console.log(promise.reason);
+          throw promise.reason;
         }
       });
     })
     .then(() => {
       const newHtml = $.html();
       return writeFile(pathToHtml, newHtml);
+    })
+    .catch((error) => {
+      throw error;
     });
 };
+
+export default downloadResources;
