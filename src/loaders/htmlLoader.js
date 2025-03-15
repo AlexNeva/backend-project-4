@@ -1,9 +1,9 @@
-import api from '../api/index.js';
-import generateSlug from '../utils/generateSlug.js';
 import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
+import api from '../api/index.js';
+import generateSlug from '../utils/generateSlug.js';
 
-export const downloadHtml = (url, dir) => {
+const downloadHtml = (url, dir) => {
   const urlObj = new URL(url);
   const formattedUrl = `${urlObj.hostname}${urlObj.pathname === '/' ? '' : urlObj.pathname}`;
 
@@ -18,3 +18,5 @@ export const downloadHtml = (url, dir) => {
       throw error;
     });
 };
+
+export default downloadHtml;

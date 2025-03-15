@@ -2,9 +2,9 @@ import nock from 'nock';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { mkdtemp, readFile } from 'node:fs/promises';
+import { beforeEach, expect, test } from '@jest/globals';
 import { getFixturePath } from './utils.js';
 import { downloadHtml } from '../src/loaders/htmlLoader.js';
-import { beforeEach, expect, test } from '@jest/globals';
 
 const pageUrl = 'https://ru.hexlet.io/courses';
 const htmlFilename = 'ru-hexlet-io-courses.html';

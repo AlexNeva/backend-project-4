@@ -3,7 +3,7 @@ import { join, parse, resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import api from '../api/index.js';
 import generateSlug from '../utils/generateSlug.js';
-import { isLocalLink } from '../utils/isLocalLink.js';
+import isLocalLink from '../utils/isLocalLink.js';
 import isAbsoluteUrl from '../utils/isAbsoluteUrl.js';
 
 const createResourceFilename = (path, hostname) => {
@@ -29,7 +29,7 @@ const mapping = {
 };
 const getAttrByTagname = (tagname) => mapping[tagname];
 
-export const downloadResources = (pathToHtml, pageUrl) => {
+const downloadResources = (pathToHtml, pageUrl) => {
   const { dir, name } = parse(pathToHtml);
   const assetsFoldername = `${name}_files`;
   const assetsPath = resolve(dir, assetsFoldername);
@@ -55,7 +55,12 @@ export const downloadResources = (pathToHtml, pageUrl) => {
           const filename = createResourceFilename(currentResourcePath, hostname);
           const newResourcePath = join(assetsFoldername, filename);
 
-          return { $node: $(el), resourcePath: href, filename, newResourcePath };
+          return {
+            $node: $(el),
+            resourcePath: href,
+            filename,
+            newResourcePath,
+          };
         })
         .toArray();
 
@@ -88,3 +93,5 @@ export const downloadResources = (pathToHtml, pageUrl) => {
       throw error;
     });
 };
+
+export default downloadResources;

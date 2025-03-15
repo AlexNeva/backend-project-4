@@ -1,7 +1,7 @@
-import { downloadHtml } from './loaders/htmlLoader.js';
 import { resolve } from 'node:path';
-import { downloadResources } from './loaders/resourcesLoader.js';
 import debug from 'debug';
+import downloadHtml from './loaders/htmlLoader.js';
+import downloadResources from './loaders/resourcesLoader.js';
 
 const log = debug('page-loader');
 
