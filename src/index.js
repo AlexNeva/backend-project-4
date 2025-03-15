@@ -10,12 +10,14 @@ const pageLoader = (url, dir = process.cwd()) => {
 
   log('Загрузка страницы');
 
-  downloadHtml(url, dir)
+  return downloadHtml(url, dir)
     .then((pathToHtml) => downloadResources(pathToHtml, url))
     .then(() => console.log(`Page was successfully downloaded into '${dirPath}'`))
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      throw error;
+    });
 };
 
 export default pageLoader;
 
-pageLoader('https://portal.hse.ru/format', './downloads');
+// pageLoader('https://portal.hse.ru/format', './downloads');

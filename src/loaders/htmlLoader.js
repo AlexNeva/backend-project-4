@@ -12,9 +12,9 @@ export const downloadHtml = (url, dir) => {
   return api
     .get(url)
     .then((response) => response.data)
-    .catch((error) => {
-      throw new Error(error.message);
-    })
     .then((html) => writeFile(filePath, html))
-    .then(() => filePath);
+    .then(() => filePath)
+    .catch((error) => {
+      throw error;
+    });
 };

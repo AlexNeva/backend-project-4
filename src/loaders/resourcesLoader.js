@@ -18,8 +18,8 @@ const loadResource = (pathToLoad, pathToWrite) =>
   api
     .get(pathToLoad, { responseType: 'arraybuffer' })
     .then((response) => writeFile(pathToWrite, response.data))
-    .catch(() => {
-      throw `Resource loading by "${pathToLoad}" is failed`;
+    .catch((error) => {
+      throw error;
     });
 
 const mapping = {
@@ -76,12 +76,15 @@ export const downloadResources = (pathToHtml, pageUrl) => {
           const attr = getAttrByTagname($node.prop('tagName').toLowerCase());
           $node.attr(attr, newResourcePath);
         } else {
-          console.log(promise.reason);
+          throw promise.reason;
         }
       });
     })
     .then(() => {
       const newHtml = $.html();
       return writeFile(pathToHtml, newHtml);
+    })
+    .catch((error) => {
+      throw error;
     });
 };
