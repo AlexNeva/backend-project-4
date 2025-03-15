@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import nock from 'nock';
 import { beforeEach, expect, test } from '@jest/globals';
 import { getFixturePath, normalizeHtml } from './utils.js';
-import { downloadResources } from '../src/loaders/resourcesLoader.js';
+import downloadResources from '../src/loaders/resourcesLoader.js';
 
 const pageUrl = 'https://ru.hexlet.io/courses';
 let tempDir;
